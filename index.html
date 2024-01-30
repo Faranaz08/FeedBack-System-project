@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feedback System</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  
+  
+</head>
+
+<b
+  ->
+  <h1 style="text-align: center">Feedback System</h1>
+
+  <div class="ratings-container">
+    <h3>Overall Ratings</h3>
+    <div><span>*</span> : <span id="rating1">0</span></div>
+    <div><span>**</span> : <span id="rating2">0</span></div>
+    <div><span>***</span> : <span id="rating3">0</span></div>
+    <div><span>****</span> : <span id="rating4">0</span></div>
+    <div><span>*****</span> : <span id="rating5">0</span></div>
+  </div>
+  <div class="main" style="margin-left: 40px">
+    <h3>Feedback Form</h3>
+    <form onsubmit="handleFormSubmit(event)">
+      <label for="name">Enter your Name : </label>
+      <input type="text" name="name" id="name" placeholder="Enter the name..." />
+      <label for="rating">Choose Rating</label>
+      <select name="rating" id="rating">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <br /><br /><br /><br />
+    <h3>All Feedbacks</h3>
+    <div id="allFeedbacks"></div>
+  </div>
+  <!-- Bootstrap JS and Popper.js -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <!-- Your existing scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.5/axios.min.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>
