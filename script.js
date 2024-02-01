@@ -1,6 +1,8 @@
-document.addEventListener("DOMContentLoaded", domContentLoader);
+document.addEventListener("loadUiContenet",async()=>{
+await loadUiContenet();
+} );
 
-function handleFormSubmit(event) {
+async function FormSubmit(event) {
   event.preventDefault();
   let myObj = {
     name: event.target.name.value,
@@ -8,31 +10,29 @@ function handleFormSubmit(event) {
   };
 
   const userId = event.target.getAttribute("data-user-id");
+  try{
 
   if (userId) {
-    axios.put(`https://crudcrud.com/api/f759e7557a744b11ba1dac1ffa9f5278/rating/${userId}`,myObj)
-      .then((response) => {
-        console.log(response);
-        domContentLoader(); 
+   await axios.put(`https://crudcrud.com/api/f25c1db4ca1d4a18b350ebcd07d8d2c8/rating/${userId}`,myObj)
+  
+        loadUiContenet(); 
         event.target.reset();
         event.target.removeAttribute("data-user-id");
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    
+    
   } else {
-    axios.post("https://crudcrud.com/api/f759e7557a744b11ba1dac1ffa9f5278/rating",myObj)
-      .then((response) => {
-        console.log(response);
-        domContentLoader();
+     await axios.post("https://crudcrud.com/api/f25c1db4ca1d4a18b350ebcd07d8d2c8/rating",myObj)
+     
+        loadUiContenet();
         event.target.reset;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    
+      
   }
+}catch(error){
+  console.error(error)
 }
-async function domContentLoader() {
+}
+async function loadUiContenet() {
     const container = document.getElementById("allFeedbacks");
     container.innerHTML = "";
     const rating1span = document.getElementById("rating1");
@@ -42,7 +42,7 @@ async function domContentLoader() {
     const rating5span = document.getElementById("rating5");
   
     try {
-      const response = await fetch("https://crudcrud.com/api/f759e7557a744b11ba1dac1ffa9f5278/rating");
+      const response = await fetch("https://crudcrud.com/api/f25c1db4ca1d4a18b350ebcd07d8d2c8/rating");
   
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -71,8 +71,7 @@ async function domContentLoader() {
     }
   }
   
-
-function showRatings(myObj, container) {
+ function showRatings(myObj, container) {
   const string = `${myObj.name} ${myObj.rating}`;
   document.getElementById("name").value = "";
   document.getElementById("rating").value = "";
@@ -88,17 +87,19 @@ function showRatings(myObj, container) {
   deleteButton.className = "deleteButton";
   newRating.appendChild(deleteButton);
 
+  
+
   const editButton = document.createElement("button");
   const editButtonText = document.createTextNode("Edit");
   editButton.appendChild(editButtonText);
   editButton.className = "edit-button";
   newRating.appendChild(editButton);
 
-  newRating.addEventListener("click", function(event) {
+  newRating.addEventListener("click",async function(event) {
     if (event.target.classList.contains("deleteButton")) {
       const userToDelete = event.target.parentElement;
       userToDelete.remove();
-      deleteUser(myObj._id);
+      await  deleteUser(myObj._id);
     } else if (event.target.classList.contains("edit-button")) {
       newRating.remove();
       document.getElementById("name").value = myObj.name;
@@ -108,18 +109,20 @@ function showRatings(myObj, container) {
   });
 }
 
-function deleteUser(id) {
-  axios.delete(`https://crudcrud.com/api/f759e7557a744b11ba1dac1ffa9f5278/rating/${id}`)
-    .then((response) => {
+async function deleteUser(id) {
+  try{
+ await axios.delete(`https://crudcrud.com/api/f25c1db4ca1d4a18b350ebcd07d8d2c8/rating/${id}`)
+    
       removeUserFromScreen(id);
-      domContentLoader();
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+      loadUiContenet();
+  }catch(error){
+    console.log(error);
+  }
+   
+    
 }
 
-function removeUserFromScreen(id) {
+async function removeUserFromScreen(id) {
   const parentNode = document.getElementById("allFeedbacks");
   const ChildNodeToBeRemoved = document.getElementById(id);
   if (ChildNodeToBeRemoved) {
