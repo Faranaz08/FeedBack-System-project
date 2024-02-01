@@ -10,26 +10,18 @@ function handleFormSubmit(event) {
   const userId = event.target.getAttribute("data-user-id");
 
   if (userId) {
-    axios
-      .put(
-        `https://crudcrud.com/api/f759e7557a744b11ba1dac1ffa9f5278/rating/${userId}`,
-        myObj
-      )
+    axios.put(`https://crudcrud.com/api/f759e7557a744b11ba1dac1ffa9f5278/rating/${userId}`,myObj)
       .then((response) => {
         console.log(response);
-        domContentLoader(); // Update the website with new user details
-        event.target.reset(); // Clear the form
+        domContentLoader(); 
+        event.target.reset();
         event.target.removeAttribute("data-user-id");
       })
       .catch((err) => {
         console.error(err);
       });
   } else {
-    axios
-      .post(
-        "https://crudcrud.com/api/f759e7557a744b11ba1dac1ffa9f5278/rating",
-        myObj
-      )
+    axios.post("https://crudcrud.com/api/f759e7557a744b11ba1dac1ffa9f5278/rating",myObj)
       .then((response) => {
         console.log(response);
         domContentLoader();
@@ -40,56 +32,45 @@ function handleFormSubmit(event) {
       });
   }
 }
+async function domContentLoader() {
+    const container = document.getElementById("allFeedbacks");
+    container.innerHTML = "";
+    const rating1span = document.getElementById("rating1");
+    const rating2span = document.getElementById("rating2");
+    const rating3span = document.getElementById("rating3");
+    const rating4span = document.getElementById("rating4");
+    const rating5span = document.getElementById("rating5");
+  
+    try {
+      const response = await fetch("https://crudcrud.com/api/f759e7557a744b11ba1dac1ffa9f5278/rating");
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      const ratingData = await response.json();
 
-function domContentLoader() {
-  const container = document.getElementById("allFeedbacks");
-  container.innerHTML = "";
-  const rating1span = document.getElementById("rating1");
-  const rating2span = document.getElementById("rating2");
-  const rating3span = document.getElementById("rating3");
-  const rating4span = document.getElementById("rating4");
-  const rating5span = document.getElementById("rating5");
-
-  axios
-    .get("https://crudcrud.com/api/f759e7557a744b11ba1dac1ffa9f5278/rating")
-    .then((response) => {
-      const ratingData = response.data;
-      let rating1 = 0;
-      let rating2 = 0;
-      let rating3 = 0;
-      let rating4 = 0;
-      let rating5 = 0;
-
-      ratingData.forEach((myObj) => {
+      const ratingsCount = [0, 0, 0, 0, 0];
+  
+      for (const myObj of ratingData) {
         showRatings(myObj, container);
-        switch (parseInt(myObj.rating)) {
-          case 1:
-            rating1++;
-            break;
-          case 2:
-            rating2++;
-            break;
-          case 3:
-            rating3++;
-            break;
-          case 4:
-            rating4++;
-            break;
-          case 5:
-            rating5++;
-            break;
+
+        const ratingIndex = parseInt(myObj.rating) - 1;
+        if (ratingIndex >= 0 && ratingIndex < ratingsCount.length) {
+          ratingsCount[ratingIndex]++;
         }
-      });
-      rating1span.textContent = rating1;
-      rating2span.textContent = rating2;
-      rating3span.textContent = rating3;
-      rating4span.textContent = rating4;
-      rating5span.textContent = rating5;
-    })
-    .catch((err) => {
+      }
+
+      rating1span.textContent = ratingsCount[0];
+      rating2span.textContent = ratingsCount[1];
+      rating3span.textContent = ratingsCount[2];
+      rating4span.textContent = ratingsCount[3];
+      rating5span.textContent = ratingsCount[4];
+    } catch (err) {
       console.log(err);
-    });
-}
+    }
+  }
+  
 
 function showRatings(myObj, container) {
   const string = `${myObj.name} ${myObj.rating}`;
@@ -128,10 +109,7 @@ function showRatings(myObj, container) {
 }
 
 function deleteUser(id) {
-  axios
-    .delete(
-      `https://crudcrud.com/api/f759e7557a744b11ba1dac1ffa9f5278/rating/${id}`
-    )
+  axios.delete(`https://crudcrud.com/api/f759e7557a744b11ba1dac1ffa9f5278/rating/${id}`)
     .then((response) => {
       removeUserFromScreen(id);
       domContentLoader();
